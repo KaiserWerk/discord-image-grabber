@@ -190,8 +190,8 @@ $current_tab = isset( $_GET['tab'] ) ? sanitize_text_field($_GET['tab']) : $tab_
                                 <input type="text" id="<?php echo $this->plugin_name; ?>-download-max-file-num"
                                        name="<?php echo $this->plugin_name; ?>[download_max_file_num]" class="regular-text"
                                        value="<?php echo $max_file_num; ?>">
-                                <br><span class="description"><?php _e( 'For every download iteration this is the maximum number of file
-                                that will be downloaded.',
+                                <br><span class="description"><?php _e( 'For every download iteration this is the maximum number of files
+                                that will be downloaded per channel. Maximum 100.',
                                         $this->plugin_name ); ?></span>
                             </td>
                         </tr>
