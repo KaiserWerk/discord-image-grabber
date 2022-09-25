@@ -200,37 +200,45 @@ class Discord_Image_Grabber
     
     public function hourly_grab()
     {
-        $this->writeLog('step 1', 'dig', true);
-
         // Get all plugin options
         $this->writeLog(print_r($this->options, true), 'options', false);
-        
-        $this->writeLog('step 2', 'dig', true);
+
+        // set up folder
+        $target_folder = WP_CONTENT_DIR . '/' . $this->plugin_name . '-files/' . $this->options['download_folder_name'];
+        if (!is_dir($target_folder)) {
+            @mkdir($target_folder, 0755, true);
+        }
+        $this->writeLog('set up target folder: ' . $target_folder, 'dig', true);
+        $allowed_content_types = $this->options['download_file_formats'];
+        $this->writeLog('set up allowed file formats: ' . $allowed_content_types, 'dig', true);
 
         // 1. set up channel IDs
         $channel_ids = explode("\n", $this->options['base_channel_ids']);
         array_map('trim', $channel_ids);
+        $this->writeLog('prepare the channel IDs: ' . implode(', ', $channel_ids), 'dig', true);
 
         // 2. set up basic data
-        $base_url = 'https://discord.com/api/v6/channels/%s/messages?limit=%d';
+        $base_url = 'https://discord.com/api/v10/channels/%s/messages?limit=%d';
         $limit = (int)$this->options['download_max_file_num'] ?? 100;
         $after = (string)$this->options['download_last_message_id'] ?? '';
 
-        foreach ($channel_ids as $id) {
-            if ($id === '') {
+        foreach ($channel_ids as $channel_id) {
+            if ($channel_id === '') {
+                $this->writeLog('channel ID is empty, continue', 'dig', true);
                 continue;
             }
 
             // 3. prepare URL
-            $url = sprintf($base_url, $id, $limit);
+            $url = sprintf($base_url, $channel_id, $limit);
             if ($after !== '') {
+                $this->writeLog('  only read messages after ID ' . $after, 'dig', true);
                 $url .= '&after=' . $after;
             }
 
-            $response = $this->make_get_request($url);
+            $response = $this->make_get_request($url, true);
             if ($response === false) {
                 $this->writeLog("result is null", "dig", true);
-                return;
+                continue;
             }
 
 //            if ($response->code >= 400) {
@@ -238,14 +246,55 @@ class Discord_Image_Grabber
 //                continue;
 //            }
 
-            $json = json_decode($response->body, true);
+            $messages = json_decode($response->body, true);
+            if (json_last_error() != JSON_ERROR_NONE) {
+                $this->writeLog("failed to decode JSON: " . json_last_error_msg(), "dig", true);
+                continue;
+            }
+            $message_num = count($messages);
 
-            $this->writeLog(sprintf("got %d elements in resulting JSON array from URL '%s' (%s)", count($json), $url, $response->body), 'request', false);
+            if ($message_num === 0) {
+                $this->writeLog("no messages received", "dig", true);
+                continue;
+            }
 
+            //$this->writeLog(sprintf("got %d elements in resulting JSON array from URL '%s' (%s)", $message_num, $url, print_r($messages[0], true)), 'request', false);
+            $this->writeLog(sprintf("got %d messages", $message_num), "dig", true);
             // first message element is the newest (= last message id)
+            $this->writeLog("last message id: " . $messages[0]['id'], "dig", true);
+            $this->options["download_last_message_id"] = (string)$messages[0]['id'];
+            $ok = update_option($this->plugin_name, $this->options);
+            if (!$ok) {
+                $this->writeLog("failed to update last message id");
+            }
+
+            foreach ($messages as $message) {
+                $attachment_num = count($message['attachments']);
+                if ($attachment_num === 0) {
+                    continue;
+                }
+
+                foreach ($message['attachments'] as $attachment) {
+                    $content_type = $attachment['content_type'];
+
+                    if (strpos($allowed_content_types, $content_type) === false) {
+                        $this->writeLog("disallowed content type " . $content_type, "dig", true);
+                        continue;
+                    }
+
+                    $remote_url = $attachment['url'];
+                    $this->writeLog("remote URL of attachment: " . $remote_url, "dig", true);
+                    $target_file = $target_folder . '/' . $attachment['filename'];
+                    $this->writeLog("target file: " . $target_file, "dig", true);
+                    $content = file_get_contents($remote_url);
+                    file_put_contents($target_file, $content);
+                }
+            }
+
+            $this->writeLog(sprintf("iteration finished for channel %s", $channel_id), "dig", true);
         }
 
-
+        $this->writeLog("all iterations finished", "dig", true);
     }
     
     private function send_discord_notification($message)
@@ -297,7 +346,7 @@ class Discord_Image_Grabber
     private function writeLog(string $cont, string $filename = 'default', bool $append = false)
     {
         if (WP_DEBUG === true) {
-            $logDir = WP_PLUGIN_DIR. '/discord-image-grabber/logs/';
+            $logDir = WP_PLUGIN_DIR. '/'.$this->plugin_name.'/logs/';
             if (!is_dir($logDir)) {
                 @mkdir($logDir, 0775, true);
             }
@@ -310,25 +359,22 @@ class Discord_Image_Grabber
         }
     }
 
-    private function make_get_request(string $url) : ?Response
+    private function make_get_request(string $url, bool $with_auth) : ?Response
     {
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET');
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_HEADER, false);
-        curl_setopt($ch, CURLOPT_CAINFO, WP_PLUGIN_DIR . '/discord-image-grabber/cacert.pem');
+        curl_setopt($ch, CURLOPT_CAINFO, WP_PLUGIN_DIR . '/'.$this->plugin_name.'/cacert.pem');
 
-        $headers = [
-            //'Accept: application/json',
-            //'Accept-Encoding: gzip, deflate',
-            //'Accept-Language: en-US,en;q=0.5',
-            //'Cache-Control: no-cache',
-            //'Content-Type: application/json',
-            'Authorization: Bot ' . $this->options['auth_bot_token'],
-        ];
+        if ($with_auth) {
+            $headers = [
+                'Authorization: Bot ' . $this->options['auth_bot_token'],
+            ];
 
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        }
         $response = curl_exec($ch);
         if(curl_errno($ch)) {
             $this->writeLog('Request Error:' . curl_error($ch), "dig", true);

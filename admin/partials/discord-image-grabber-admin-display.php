@@ -167,8 +167,8 @@ $current_tab = isset( $_GET['tab'] ) ? sanitize_text_field($_GET['tab']) : $tab_
                             <td>
                                 <input type="text" id="<?php echo $this->plugin_name; ?>-download-file-formats"
                                        name="<?php echo $this->plugin_name; ?>[download_file_formats]" class="regular-text"
-                                       value="<?php echo $file_formats; ?>" placeholder="jpg,png">
-                                <br><span class="description"><?php _e( 'Please enter allowed file formats, separated by comma.',
+                                       value="<?php echo $file_formats; ?>" placeholder="image/jpeg,image/png">
+                                <br><span class="description"><?php _e( 'Please enter allowed file formats, separated with a comma or space.',
 									    $this->plugin_name ); ?></span>
                             </td>
                         </tr>
