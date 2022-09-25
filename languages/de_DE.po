@@ -1,0 +1,132 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Test\n"
+"POT-Creation-Date: 2018-01-31 00:05+0100\n"
+"PO-Revision-Date: 2018-01-31 00:12+0100\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.0.6\n"
+"X-Poedit-Basepath: ..\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-KeywordsList: __;_e\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: admin/class-discord-image-grabber-admin.php:134
+msgid "Settings"
+msgstr "Einstellungen"
+
+#: admin/partials/discord-image-grabber-admin-display.php:54
+#: admin/partials/discord-image-grabber-admin-display.php:75
+msgid "Import settings"
+msgstr "Einstellungen importieren"
+
+#: admin/partials/discord-image-grabber-admin-display.php:55
+msgid ""
+"Use this section to import your Discord Image Grabber settings\n"
+"                from a file. Alternatively, copy/paste the contents of your "
+"import file into the textarea below."
+msgstr ""
+"Nutze diesen Bereich, um Discord Image Grabber-Einstellungen mittels einer "
+"Konfigurationsdatei zi importieren. Alternativ kannst du auch den "
+"Dateiinhalt in das untenstehende Textfeld einfügen."
+
+#: admin/partials/discord-image-grabber-admin-display.php:61
+msgid "Import File"
+msgstr "Import-Datei"
+
+#: admin/partials/discord-image-grabber-admin-display.php:64
+msgid ""
+"After selecting your file, click the button below to apply the settings to "
+"your site."
+msgstr "Nach dem Auswählen der Datei klicke bitte auf auf \"Import starten\"."
+
+#: admin/partials/discord-image-grabber-admin-display.php:68
+msgid "Copy/Paste Import Data"
+msgstr "Import-Daten mittels Copy/Paste"
+
+#: admin/partials/discord-image-grabber-admin-display.php:87
+msgid "Discord Image Grabber settings"
+msgstr "Discord Image Grabber Einstellungen"
+
+#: admin/partials/discord-image-grabber-admin-display.php:93
+msgid "Association"
+msgstr "Verband"
+
+#: admin/partials/discord-image-grabber-admin-display.php:102
+msgid "Please select the correct association."
+msgstr "Bitte wähle den korrekten Verband aus."
+
+#: admin/partials/discord-image-grabber-admin-display.php:106
+msgid "Endpoint"
+msgstr "Entpoint"
+
+#: admin/partials/discord-image-grabber-admin-display.php:109
+msgid "This is where the Discord Image API is hosted at. Only supply the base URL."
+msgstr ""
+"Gibt an, wo die API gehostet wird. Es wird nur die Basis-URL "
+"benötigt."
+
+#: admin/partials/discord-image-grabber-admin-display.php:113
+msgid "Category"
+msgstr "Kategorie"
+
+#: admin/partials/discord-image-grabber-admin-display.php:126
+msgid ""
+"Choose which category new Discord Images should have (usually sth. like &quot;"
+"Images&quot;)."
+msgstr ""
+"Wähle aus, welche Kategorie neu übertragene Urteile haben sollten "
+"(typscherweise so etwas wie Urteile)."
+
+#: admin/partials/discord-image-grabber-admin-display.php:131
+#: admin/partials/discord-image-grabber-admin-display.php:192
+msgid "Save settings"
+msgstr "Einstellungen speichern"
+
+#: admin/partials/discord-image-grabber-admin-display.php:142
+msgid "Discord Image Grabber notification settings"
+msgstr "Discord Image Grabber Benachrichtigungseinstellungen"
+
+#: admin/partials/discord-image-grabber-admin-display.php:147
+msgid "Enable HipChat Notifications"
+msgstr "Aktiviere HipChat Benachrichtigungen"
+
+#: admin/partials/discord-image-grabber-admin-display.php:153
+msgid "Chat Name"
+msgstr "Chatname"
+
+#: admin/partials/discord-image-grabber-admin-display.php:156
+msgid "Please enter the subdomain part of your HipChat URL."
+msgstr "Bitte gib den Subdomain-Teile deiner HipChat URL an."
+
+#: admin/partials/discord-image-grabber-admin-display.php:160
+msgid "Room number"
+msgstr "Raumnummer"
+
+#: admin/partials/discord-image-grabber-admin-display.php:163
+msgid "Please enter the room number."
+msgstr "Bitte gib die Raumnummer an."
+
+#: admin/partials/discord-image-grabber-admin-display.php:167
+msgid "Token"
+msgstr "Token"
+
+#: admin/partials/discord-image-grabber-admin-display.php:170
+msgid "Please enter the token. May also be called access key."
+msgstr "Bitte gib den Token an. Er wird auch access key oder API key genant."
+
+#: admin/partials/discord-image-grabber-admin-display.php:177
+msgid "Enable e-mail Notifications"
+msgstr "Aktiviere E-Mail-Benachrichtigungen"
+
+#: admin/partials/discord-image-grabber-admin-display.php:183
+msgid "List of e-mail addresses"
+msgstr "Liste der E-Mail-Adressen"
+
+#: admin/partials/discord-image-grabber-admin-display.php:186
+msgid "One address per line."
+msgstr "Eine pro Zeile."
