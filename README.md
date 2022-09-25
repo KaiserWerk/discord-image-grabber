@@ -7,7 +7,7 @@ in a Discord channel.
 The plugin folder is supposed to be named "discord-image-grabber".
 
 ## Why
-This plugin was created then need arose to collect images from discord messages in order
+This plugin was created when then need arose to collect images from discord messages in order
 to create a gallery page of those images in WordPress, based on (real life) events.
 This way you don't have to download all images by hand.
 
